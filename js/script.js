@@ -3,7 +3,7 @@ let currentSection = 'inicio';
 let galleryItems = [];
 let currentImageIndex = 0;
 
-// Datos de ejemplo para la galería (se reemplazarían con imágenes reales)
+// Galería de imágenes
 const sampleImages = [
     { id: 1, src: 'images/sample1.jpg', alt: 'Foto de boda 1' },
     { id: 2, src: 'images/sample2.jpg', alt: 'Foto de boda 2' },
@@ -94,6 +94,14 @@ function changeSection(sectionId) {
 function initGallery() {
     const galleryContainer = document.querySelector('.gallery-container');
     
+    // Contenedor con estilo de Grid
+    if (galleryContainer) {
+        galleryContainer.style.display = 'grid';
+        galleryContainer.style.gridTemplateColumns = 'repeat(auto-fill, minmax(250px, 1fr))';
+        galleryContainer.style.gap = '10px';
+        galleryContainer.style.padding = '10px';
+    }
+    
     // Cargar imágenes de muestra (en producción, se cargarían imágenes reales)
     galleryItems = sampleImages;
     
@@ -145,13 +153,33 @@ function renderGallery(items) {
         galleryItem.className = 'gallery-item';
         galleryItem.setAttribute('data-id', item.id);
         galleryItem.setAttribute('data-index', index);
+
+        // Estilos para los items en grid
+        galleryItem.style.overflow = 'hidden';
+        galleryItem.style.borderRadius = '4px';
+        galleryItem.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1';
+        galleryItem.style.transition = 'transform 0.3s ease';
+        galleryItem.style.cursor = 'pointer';
         
         const img = document.createElement('img');
         img.src = item.src;
         img.alt = item.alt;
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
+        img.style.display = 'block';
         
         galleryItem.appendChild(img);
         galleryContainer.appendChild(galleryItem);
+
+        // Efecto hover
+        galleryItem.addEventListener('mouseenter', () => {
+            galleryItem.style.transform = 'scale(1.03)';
+        });
+
+        galleryItem.addEventListener('mouseleave', () => {
+            galleryItem.style.transform = 'scale(1)';
+        })
         
         // Abrir modal al hacer clic en una imagen
         galleryItem.addEventListener('click', () => {
