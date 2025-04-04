@@ -493,3 +493,58 @@ footer {
         max-width: 300px;
     }
 }
+/* Ajustes para el header en dispositivos móviles en modo landscape */
+@media screen and (max-height: 450px) and (orientation: landscape) {
+  /* Reducir altura del header */
+  header {
+    padding: 10px 0;
+  }
+  
+  /* Reducir tamaño del título principal */
+  .header-content h1 {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+  }
+  
+  /* Reducir tamaño del subtítulo/nombres */
+  .header-content .names {
+    font-size: 1rem;
+    margin-bottom: 5px;
+  }
+  
+  /* Compactar el menú de navegación */
+  nav .menu {
+    padding: 5px 0;
+  }
+  
+  nav .menu li {
+    margin: 0 8px;
+  }
+  
+  /* Ajustar espacio en las secciones */
+  .section {
+    padding-top: 15px;
+  }
+  
+  /* Ajustar el banner para que no ocupe tanto espacio */
+  .banner {
+    height: 130px;
+  }
+  
+  /* Reducir el padding en el contenido */
+  .intro, .featured-photos, .tips-container {
+    padding: 10px 15px;
+  }
+  
+  /* Reducir el espacio entre elementos */
+  h2, h3 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  /* Opcional. para reducir el header más */
+  /* nav .menu a {
+    padding: 3px 8px;
+    font-size: 0.9rem;
+  }
+}*/
