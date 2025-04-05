@@ -21,6 +21,11 @@ const sampleImages = [
 
 // Inicialización cuando el DOM está cargado
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM cargado completamente');
+    
+    // Primero, intentamos arreglar el botón de cierre del modal
+    fixModalCloseButton();
+    
     // Inicializar navegación
     initNavigation();
     
@@ -32,7 +37,99 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Inicializar menú responsive
     initResponsiveMenu();
+    
+    // Inicializar nav sticky
+    initStickyNav();
 });
+
+// NUEVA FUNCIÓN: Intento agresivo de arreglar el botón de cierre
+function fixModalCloseButton() {
+    console.log('Intentando arreglar el botón de cierre...');
+    
+    // 1. Verificar si existe el modal y el botón
+    const modal = document.querySelector('.modal');
+    let closeBtn = document.querySelector('.close');
+    
+    console.log('Modal encontrado:', !!modal);
+    console.log('Botón cerrar encontrado:', !!closeBtn);
+    
+    if (!modal) {
+        console.error('¡Modal no encontrado!');
+        return;
+    }
+    
+    // 2. Si el botón no existe, intentamos crearlo
+    if (!closeBtn) {
+        console.log('Creando un nuevo botón de cierre...');
+        closeBtn = document.createElement('span');
+        closeBtn.className = 'close';
+        closeBtn.innerHTML = '&times;';
+        closeBtn.style.position = 'absolute';
+        closeBtn.style.top = '15px';
+        closeBtn.style.right = '25px';
+        closeBtn.style.color = '#f1f1f1';
+        closeBtn.style.fontSize = '35px';
+        closeBtn.style.fontWeight = 'bold';
+        closeBtn.style.cursor = 'pointer';
+        closeBtn.style.zIndex = '2500';
+        
+        // Añadir al modal
+        const modalContent = modal.querySelector('.modal-content');
+        if (modalContent) {
+            modalContent.appendChild(closeBtn);
+        } else {
+            modal.appendChild(closeBtn);
+        }
+    } else {
+        // Asegurarnos que el botón existente tenga un z-index alto
+        closeBtn.style.zIndex = '2500';
+    }
+    
+    // 3. Asignar múltiples eventos para cerrarlo (por si alguno falla)
+    
+    // Método 1: addEventListener normal
+    closeBtn.addEventListener('click', function(e) {
+        console.log('Botón cerrar clickeado (método 1)');
+        modal.style.display = 'none';
+        e.stopPropagation(); // Prevenir propagación
+    });
+    
+    // Método 2: onclick directo
+    closeBtn.onclick = function(e) {
+        console.log('Botón cerrar clickeado (método 2)');
+        modal.style.display = 'none';
+        e.stopPropagation(); // Prevenir propagación
+        return false;
+    };
+    
+    // Método 3: añadir evento al document para capturar cualquier clic en el botón
+    document.addEventListener('click', function(e) {
+        if (e.target === closeBtn) {
+            console.log('Botón cerrar clickeado (método 3)');
+            modal.style.display = 'none';
+        }
+    });
+    
+    // 4. Métodos alternativos para cerrar el modal
+    
+    // Cerrar con Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.style.display === 'block') {
+            console.log('Modal cerrado con Escape');
+            modal.style.display = 'none';
+        }
+    });
+    
+    // Cerrar haciendo clic fuera
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            console.log('Modal cerrado haciendo clic fuera');
+            modal.style.display = 'none';
+        }
+    });
+    
+    console.log('Configuración de cierre del modal completada');
+}
 
 // Función para inicializar la navegación
 function initNavigation() {
@@ -76,7 +173,7 @@ function initNavigation() {
     }
 }
 
-// Función para cambiar de sección
+// funcion para cambiar de seccion
 function changeSection(sectionId) {
     // Ocultar todas las secciones
     const sections = document.querySelectorAll('.section');
@@ -90,62 +187,22 @@ function changeSection(sectionId) {
     }
 }
 
-// Función para inicializar la galería
+// Func para inicializar la galería
 function initGallery() {
     const galleryContainer = document.querySelector('.gallery-container');
     
-    // Contenedor con estilo de Grid
-    if (galleryContainer) {
-        galleryContainer.style.display = 'grid';
-        galleryContainer.style.gridTemplateColumns = 'repeat(auto-fill, minmax(250px, 1fr))';
-        galleryContainer.style.gap = '10px';
-        galleryContainer.style.padding = '10px';
-    }
-    
-    // Cargar imágenes de muestra (en producción, se cargarían imágenes reales)
+    // Cargar images de muestra (en prod, se cargarían imágenes reales)
     galleryItems = sampleImages;
     
     // Renderizar la galería con todas las imágenes
     renderGallery(galleryItems);
-    
-    // Configurar modal
-    const modal = document.querySelector('.modal');
-    const modalImg = document.getElementById('modal-img');
-    const closeBtn = document.querySelector('.close');
-    const prevBtn = document.querySelector('.prev-btn');
-    const nextBtn = document.querySelector('.next-btn');
-    
-    // Cerrar modal
-    closeBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
-    
-    // Cerrar modal con Escape
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.style.display === 'block') {
-            modal.style.display = 'none';
-        }
-    });
-    
-    // Navegación con teclado en el modal
-    window.addEventListener('keydown', (e) => {
-        if (modal.style.display === 'block') {
-            if (e.key === 'ArrowLeft') {
-                navigateGallery('prev');
-            } else if (e.key === 'ArrowRight') {
-                navigateGallery('next');
-            }
-        }
-    });
-    
-    // Botones de navegación
-    prevBtn.addEventListener('click', () => navigateGallery('prev'));
-    nextBtn.addEventListener('click', () => navigateGallery('next'));
 }
 
-// Función para renderizar la galería
+// Func para renderizar la galería
 function renderGallery(items) {
     const galleryContainer = document.querySelector('.gallery-container');
+    if (!galleryContainer) return;
+    
     galleryContainer.innerHTML = '';
     
     items.forEach((item, index) => {
@@ -153,45 +210,40 @@ function renderGallery(items) {
         galleryItem.className = 'gallery-item';
         galleryItem.setAttribute('data-id', item.id);
         galleryItem.setAttribute('data-index', index);
-
-        // Estilos para los items en grid
-        galleryItem.style.overflow = 'hidden';
-        galleryItem.style.borderRadius = '4px';
-        galleryItem.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1';
-        galleryItem.style.transition = 'transform 0.3s ease';
-        galleryItem.style.cursor = 'pointer';
         
         const img = document.createElement('img');
         img.src = item.src;
         img.alt = item.alt;
-        img.style.width = '100%';
-        img.style.height = '100%';
-        img.style.objectFit = 'cover';
-        img.style.display = 'block';
         
         galleryItem.appendChild(img);
         galleryContainer.appendChild(galleryItem);
-
-        // Efecto hover
-        galleryItem.addEventListener('mouseenter', () => {
-            galleryItem.style.transform = 'scale(1.03)';
-        });
-
-        galleryItem.addEventListener('mouseleave', () => {
-            galleryItem.style.transform = 'scale(1)';
-        })
         
         // Abrir modal al hacer clic en una imagen
-        galleryItem.addEventListener('click', () => {
+        galleryItem.addEventListener('click', function() {
             openImageModal(index, items);
         });
     });
 }
 
-// Función para abrir el modal de imagen
+// Func para actualizar el contador de imágenes en el modal
+function updateCounter() {
+    const currentIndexElement = document.getElementById('current-index');
+    const totalImagesElement = document.getElementById('total-images');
+    
+    if (currentIndexElement && totalImagesElement) {
+        currentIndexElement.textContent = currentImageIndex + 1;
+        totalImagesElement.textContent = galleryItems.length;
+    }
+}
+
+// Func para abrir el modal de imagen
 function openImageModal(index, items) {
     const modal = document.querySelector('.modal');
     const modalImg = document.getElementById('modal-img');
+    const prevBtn = document.querySelector('.prev-btn');
+    const nextBtn = document.querySelector('.next-btn');
+    
+    if (!modal || !modalImg) return;
     
     currentImageIndex = index;
     
@@ -199,14 +251,31 @@ function openImageModal(index, items) {
     modalImg.src = items[index].src;
     modalImg.alt = items[index].alt;
     
+    // Configurar eventos de navegación
+    if (prevBtn) {
+        prevBtn.onclick = function() {
+            navigateGallery('prev');
+        };
+    }
+    
+    if (nextBtn) {
+        nextBtn.onclick = function() {
+            navigateGallery('next');
+        };
+    }
+    
+    // Actualizar el contador de imágenes
+    updateCounter();
+    
     // Mostrar el modal
     modal.style.display = 'block';
+    console.log('Modal abierto con imagen', index);
 }
 
 // Función para navegar por la galería en el modal
 function navigateGallery(direction) {
-    const modal = document.querySelector('.modal');
     const modalImg = document.getElementById('modal-img');
+    if (!modalImg) return;
     
     // Calcular el nuevo índice
     if (direction === 'prev') {
@@ -218,6 +287,9 @@ function navigateGallery(direction) {
     // Actualizar la imagen
     modalImg.src = galleryItems[currentImageIndex].src;
     modalImg.alt = galleryItems[currentImageIndex].alt;
+    
+    // Actualizar el contador de imágenes
+    updateCounter();
 }
 
 // Función para inicializar los botones de copiar
@@ -278,3 +350,20 @@ function initResponsiveMenu() {
         }
     });
 }
+
+// Func para inicializar el comportamiento sticky de la navegación!!
+function initStickyNav() {
+    const nav = document.querySelector('nav');
+    
+    window.addEventListener('scroll', function() {
+        // Determinar si debemos aplicar la clase sticky
+        if (window.scrollY > 50) {
+            nav.classList.add('sticky');
+        } else {
+            nav.classList.remove('sticky');
+        }
+    });
+}
+
+// Consejo en consola para depuración
+console.log('Para cerrar el modal manualmente, ejecuta en consola: document.querySelector(".modal").style.display = "none"');
