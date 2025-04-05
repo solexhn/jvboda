@@ -283,7 +283,26 @@ main {
     gap: 2rem;
     margin-bottom: 2rem;
 }
+/* añadido para link on image */
+.qr-code a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
 
+.qr-code a img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.qr-hint {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin-top: 10px;
+    font-style: italic;
+}
+ /* hasta aqui */
 .qr-section, .payment-info {
     flex: 1;
     min-width: 300px;
