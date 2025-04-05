@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Álbum de Fotos de Boda</title>
     <link rel="stylesheet" href="css/styles.css">
-    <!-- Añadir el nuevo archivo CSS para la galería -->
-    <link rel="stylesheet" href="css/gallery-grid.css">
+    <link rel="stylesheet" href="css/grid-galeria.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Header sin cambios -->
+    <!-- Header con navegación sticky -->
     <header>
         <div class="header-content">
             <h1>Nuestra Boda</h1>
@@ -69,34 +68,33 @@
         <section id="galeria" class="section">
             <h2>Todas las Fotos</h2>
             
-            <!-- Opcionalmente añadir una descripción o categorías -->
+            <!-- Descripción de la galería -->
             <div class="gallery-description">
                 <p>Explora todos los recuerdos de nuestra boda</p>
             </div>
             
-            <!-- Contenedor de la galería (sin cambios) -->
+            <!-- Contenedor de la galería -->
             <div class="gallery-container">
                 <!-- Las imágenes se cargarán dinámicamente con JavaScript -->
             </div>
             
-            <!-- Modal mejorado para la visualización de imágenes -->
+            <!-- Modal para la visualización de imágenes -->
             <div class="modal">
-                <span class="close">&times;</span>
+                <span class="close" onclick="this.parentElement.style.display='none'">&times;</span>
                 <div class="modal-content">
                     <img id="modal-img" alt="Imagen ampliada">
                     <div class="modal-nav">
                         <button class="prev-btn" aria-label="Imagen anterior"><i class="fas fa-chevron-left"></i></button>
                         <button class="next-btn" aria-label="Imagen siguiente"><i class="fas fa-chevron-right"></i></button>
                     </div>
-                    <!-- Opcional: Añadir contador de imágenes -->
+                    <!-- Contador de imágenes -->
                     <div class="modal-counter">
                         <span id="current-index"></span> / <span id="total-images"></span>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- Sección de Propinas sin cambios -->
+        <!-- Sección de Propinas -->
         <section id="propinas" class="section">
             <h2>¿Quieres dejarme una propina?</h2>
             <div class="tips-container">
@@ -128,7 +126,7 @@
 
     <footer>
         <div class="footer-content">
-            <p>&copy; 2025 Álbum de Boda de John & Valeria</p>
+            <p>&copy; 2025 solexhn</p>
             <p>Con amor para todos nuestros invitados</p>
         </div>
     </footer>
